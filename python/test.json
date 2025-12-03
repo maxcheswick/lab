@@ -1,0 +1,6 @@
+[
+  {"name": "auth-service", "version": "3.1.0", "status": "healthy"},
+  {"name": "billing-service", "version": "1.5.0", "status": "degraded"},
+  {"name": "crm-api", "version": "2.7.3", "status": "healthy"},
+  {"name": "events-worker", "version": "4.0.1", "status": "unhealthy"}
+]

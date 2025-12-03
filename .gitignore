@@ -1,0 +1,41 @@
+# Python virtual environment
+python/venv/
+
+# Byte compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Virtual environment activation scripts temp files
+*.env
+.env.local
+.env.*.local
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# MyPy cache
+.mypy_cache/
+
+# Pytest cache
+.pytest_cache/
+
+# Cache files
+*.cache

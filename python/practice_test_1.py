@@ -20,36 +20,45 @@ import argparse
 import re
 
 def parse_file(file):
+    counter = {"ERROR": 0, "INFO": 0, "WARN": 0}
     error_lines = []
-    counts = {"ERROR": 0, "INFO": 0, "WARN": 0}
-    request_ids = set()
+    request_id = set()
     
     with open(file) as f:
         for line in f:
-            parse = line.split()
-            level = parse[2]
+            parts = line.split()
+            if len(parts) < 3:
+                continue
+
+            level = parts[2]
             
-            if level in counts:
-                counts[level] += 1
+            if level in counter:
+                counter[level] += 1
                 
             if level == "ERROR":
-                clean = line.rstrip()
-                error_lines.append(clean)
+                error_lines.append(line)
                 
-                m = re.search(r"index_ids=(\w+)", clean)
+                m = re.search(r"request_id=(\w+)", line)
                 if m:
-                    request_ids.add(group(1))
+                    request_id.add(m.group(1))
+                    # request_id = sorted(request_id)
                     
-    print("Counts")
-    print(counts)
+
+                
+    print("Counter")
+    print(counter)
     
-    print("\nError lines")
+    print("\nError List")
     for l in error_lines:
         print(l)
-        
+    
+    print("\nRequest ID")
+    print(request_id)
+    
     print("\nUnique IDs")
-    print(len(request_ids))
-                        
+    print(len(request_id))
+    
+                
 
 def main():
     parser = argparse.ArgumentParser()
@@ -57,6 +66,7 @@ def main():
     args = parser.parse_args()
     
     parse_file(args.file)
+
 
 if __name__ == "__main__":
     main()
