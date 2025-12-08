@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  server00:
+    build: ./server-image
+    container_name: server00
+    hostname: server00.quiz.example.vercara
+    ports:
+      - "2200:22"
+    volumes:
+      - ./madeup.log:/var/log/ultradns-quiz-madeup.log
+
+  server01:
+    build: ./server-image
+    container_name: server01
+    hostname: server01.quiz.example.vercara
+    ports:
+      - "2201:22"
+    volumes:
+      - ./madeup.log:/var/log/ultradns-quiz-madeup.log
+
+  server02:
+    build: ./server-image
+    container_name: server02
+    hostname: server02.quiz.example.vercara
+    ports:
+      - "2202:22"
+    volumes:
+      - ./madeup.log:/var/log/ultradns-quiz-madeup.log
+
+  server03:
+    build: ./server-image
+    container_name: server03
+    hostname: server03.quiz.example.vercara
+    ports:
+      - "2203:22"
+    volumes:
+      - ./madeup.log:/var/log/ultradns-quiz-madeup.log
+
+  server04:
+    build: ./server-image
+    container_name: server04
+    hostname: server04.quiz.example.vercara
+    ports:
+      - "2204:22"
+    volumes:
+      - ./madeup.log:/var/log/ultradns-quiz-madeup.log
+
+  server05:
+    build: ./server-image
+    container_name: server05
+    hostname: server05.quiz.example.vercara
+    ports:
+      - "2205:22"
+    volumes:
+      - ./madeup.log:/var/log/ultradns-quiz-madeup.log

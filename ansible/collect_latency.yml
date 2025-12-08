@@ -1,0 +1,66 @@
+---
+- name: Collect latency metrics from quiz servers
+  hosts: quiz_servers
+  gather_facts: no
+
+  vars:
+    log_path: "/var/log/ultradns-quiz-madeup.log"
+    pattern: "Ultradns quiz application took"
+    sample_size: 20
+
+  tasks:
+
+    - name: Ensure log file exists
+      stat:
+        path: "{{ log_path }}"
+      register: log_stat
+
+    - name: Fail if log file missing
+      fail:
+        msg: "Log file {{ log_path }} not found on {{ inventory_hostname }}"
+      when: not log_stat.stat.exists
+
+    - name: Get last {{ sample_size }} matching log lines
+      shell: "grep -E 'Ultradns quiz application took [0-9]+ ms$' {{ log_path }} | tail -{{ sample_size }}"
+      register: raw_lines
+      changed_when: false
+
+    - name: Ensure exactly {{ sample_size }} lines found
+      assert:
+        that:
+          - raw_lines.stdout_lines | length == {{ sample size }}
+        fail_msg: "Expected {{ sample_size }} lines on {{ inventory_hostname }}, got {{ raw_lines.stdout_lines | length }}"
+
+
+    - name: Run Python log parser locally to compute stats
+      delegate_to: localhost
+      command: ./scripts/log_parser.py
+      args:
+        stdin: "{{ {'lines': raw_lines.stdout_lines} | to_json }}"
+      register: parsed
+      changed_when: false
+
+    - name: Parse JSON returned by Python
+      set_fact:
+        stats: "{{ parsed.stdout | from_json }}"
+        timings: "{{ (parsed.stdout | from_json).timings }}"
+        mean: "{{ (parsed.stdout | from_json).mean }}"
+        stddev: "{{ (parsed.stdout | from_json).stddev }}"
+
+
+    - name: Show results for this server
+      debug:
+        msg: |
+          Server: {{ inventory_hostname }}
+          Timings: {{ timings }}
+          Mean: {{ mean }}
+          Stddev: {{ stddev }}
+
+- name: Aggregate results across all servers
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Print collected metrics
+      debug:
+        msg: "{{ hostvars | dict2items | json_query('[].value.stats') }}"

@@ -39,3 +39,5 @@ htmlcov/
 
 # Cache files
 *.cache
+
+ansible/server-image/authorized_keys

@@ -25,3 +25,9 @@ unique = set(values)
 from datetime import datetime
 dt = datetime.strptime("2025-09-17 04:20:00", "%Y-%m-%d %H:%M:%S")
 
+#Regex
+import re
+m = re.search(r"level=(\w+)", line)
+if m:
+    print(m.group(1))
+    
